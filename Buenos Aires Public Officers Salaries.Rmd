@@ -22,16 +22,16 @@ names(sal2013) <- names(sal2012)
 sal2014 <- read.csv("sueldos-funcionarios-2014.csv", sep=";", colClasses = "character", dec=",")[,c("anio", "mes", "apellido", "nombre", "cargo", "asig_mensuales", "salario_familiar", "descuentos_mensuales", "liquido")]
 names(sal2014) <- names(sal2012)
 
-sal2015 <- read.csv("sueldos-funcionarios-2015.csv", sep=";", colClasses = "character", c=",")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRES", "CARGO", "ASIG_MENSUALES", "SALARIO_FAMILIAR", "DESCUENTOS_MENSUALES", "LIQUIDO")]
+sal2015 <- read.csv("sueldos-funcionarios-2015.csv", sep=";", colClasses = "character", c=",")[,c("AÃƒ.O", "MES", "APELLIDO", "NOMBRES", "CARGO", "ASIG_MENSUALES", "SALARIO_FAMILIAR", "DESCUENTOS_MENSUALES", "LIQUIDO")]
 names(sal2015) <- names(sal2012)
 
-sal2016 <- read.csv("sueldos-funcionarios-2016.csv", sep=";", colClasses = "character", dec=",")[,c("ï..AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
+sal2016 <- read.csv("sueldos-funcionarios-2016.csv", sep=";", colClasses = "character", dec=",")[,c("Ã¯..AÃƒ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
 names(sal2016) <- names(sal2012)
 
-sal2017 <- read.csv("sueldos-funcionarios-2017.csv", sep=";", colClasses = "character", dec=",")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
+sal2017 <- read.csv("sueldos-funcionarios-2017.csv", sep=";", colClasses = "character", dec=",")[,c("AÃƒ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
 names(sal2017) <- names(sal2012)
 
-sal2018 <- read.csv("sueldos-funcionarios-2018.csv", sep=",", colClasses = "character", dec=".")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_ASIGNACIONES", "SALARIO_FAMILIAR", "DESCUENTOS", "LIQUIDO")]
+sal2018 <- read.csv("sueldos-funcionarios-2018.csv", sep=",", colClasses = "character", dec=".")[,c("AÃƒ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_ASIGNACIONES", "SALARIO_FAMILIAR", "DESCUENTOS", "LIQUIDO")]
 names(sal2018) <- names(sal2012)
 
 salaries <- rbind(sal2012, sal2013, sal2014, sal2015, sal2016, sal2017, sal2018)
@@ -56,4 +56,4 @@ salaries$POSITION <- toupper(salaries$CARGO)
 text <- with(salaries, paste(NOMBRES, APELLIDO, "<br>", CARGO))
 plot_ly(salaries, x = ~DATE, y = ~PAID, type="scatter", mode="markers", color=~POSITION, text=text, showlegend=F)
 ```
-Base monthly salaries for Buenos Aires top officers as published on the city's open data site: https://data.buenosaires.gob.ar/dataset/sueldo-funcionarios   
+Base monthly salaries in Argentine Pesos for Buenos Aires top officers as published on the city's open data site: https://data.buenosaires.gob.ar/dataset/sueldo-funcionarios   
