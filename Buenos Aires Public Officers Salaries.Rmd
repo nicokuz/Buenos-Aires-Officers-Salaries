@@ -1,0 +1,59 @@
+---
+title: "Plotly Exercise"
+author: "Nicolas E. Kuzminski"
+date: "27 de febrero de 2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(lubridate)
+library(plotly)
+```
+
+```{r load}
+
+sal2012 <- read.csv("sueldos-funcionarios-2012.csv", sep=";", colClasses = "character", dec=",")
+
+sal2013 <- read.csv("sueldos-funcionarios-2013.csv", sep=";", colClasses = "character", dec=",")[,c("anio", "mes", "apellido", "nombre", "cargo", "asig_mensuales", "salario_familiar", "descuentos_mensuales", "liquido")]
+names(sal2013) <- names(sal2012)
+
+sal2014 <- read.csv("sueldos-funcionarios-2014.csv", sep=";", colClasses = "character", dec=",")[,c("anio", "mes", "apellido", "nombre", "cargo", "asig_mensuales", "salario_familiar", "descuentos_mensuales", "liquido")]
+names(sal2014) <- names(sal2012)
+
+sal2015 <- read.csv("sueldos-funcionarios-2015.csv", sep=";", colClasses = "character", c=",")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRES", "CARGO", "ASIG_MENSUALES", "SALARIO_FAMILIAR", "DESCUENTOS_MENSUALES", "LIQUIDO")]
+names(sal2015) <- names(sal2012)
+
+sal2016 <- read.csv("sueldos-funcionarios-2016.csv", sep=";", colClasses = "character", dec=",")[,c("ï..AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
+names(sal2016) <- names(sal2012)
+
+sal2017 <- read.csv("sueldos-funcionarios-2017.csv", sep=";", colClasses = "character", dec=",")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_DE_ASIGNACIONES", "SALARIO_FAMILIAR", "TOTAL_DE_DESCUENTOS", "LIQUIDO")]
+names(sal2017) <- names(sal2012)
+
+sal2018 <- read.csv("sueldos-funcionarios-2018.csv", sep=",", colClasses = "character", dec=".")[,c("AÃ.O", "MES", "APELLIDO", "NOMBRE", "CARGO", "TOTAL_ASIGNACIONES", "SALARIO_FAMILIAR", "DESCUENTOS", "LIQUIDO")]
+names(sal2018) <- names(sal2012)
+
+salaries <- rbind(sal2012, sal2013, sal2014, sal2015, sal2016, sal2017, sal2018)
+```
+```{r wrangle}
+salaries <- mutate(salaries, MES=toupper(MES)) %>%
+  left_join(data.frame(                   
+    MES=c("ABRIL","AGOSTO","DICIEMBRE","ENERO","FEBRERO","JULIO","JUNIO","MARZO","MAYO","NOVIEMBRE","OCTUBRE","SEPTIEMBRE","SETIEMBRE"),
+    MESNUM=c(4, 8, 12, 1, 2, 7, 6, 3, 5, 11, 10, 9, 9)), by="MES") %>%
+              mutate(MESNUM = ifelse(!is.na(as.numeric(MES)), MES, MESNUM))
+
+salaries$DATE <- make_date(year = salaries$ANIO, month = salaries$MESNUM)
+
+salaries$PAID <- ifelse(salaries$ANIO == 2018,
+                           as.numeric(salaries$ASIG_MENSUALES),
+                           as.numeric(sub(",", ".", sub(".", "", salaries$ASIG_MENSUALES, fixed = T), fixed = T)))
+
+salaries$POSITION <- toupper(salaries$CARGO)
+```
+## Buenos Aires Public Officers Salaries
+```{r cars, echo = FALSE, warning=FALSE}
+text <- with(salaries, paste(NOMBRES, APELLIDO, "<br>", CARGO))
+plot_ly(salaries, x = ~DATE, y = ~PAID, type="scatter", mode="markers", color=~POSITION, text=text, showlegend=F)
+```
+Base monthly salaries for Buenos Aires top officers as published on the city's open data site: https://data.buenosaires.gob.ar/dataset/sueldo-funcionarios   
